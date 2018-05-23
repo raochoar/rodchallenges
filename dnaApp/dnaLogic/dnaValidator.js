@@ -43,7 +43,7 @@ function DnaValidator() {
     var result = [];
     _.each(inputValues, function(row){
       result.push(_.toArray(row)); // move into an array
-    })
+    });
     return result;
   }
 
@@ -53,31 +53,51 @@ function DnaValidator() {
     return validator.getHorizontalMatches(newValues);
   };
 
-  function getDiagWords(i,j, inputValues)
-  {
-    if(inputValues.length - i < 4 && inputValues.length - j < 4)
-    {
-      return [];
-    }
-    var wordLeftToRigth = [];
-    //It supose that the matrix is a square
-    while(i < inputValues.length && j < inputValues.length){
-      wordLeftToRigth.push(inputValues[i][j]);
-      i++;
-      j++;
-    }
-    return wordLeftToRigth;
-  }
 
-  validator.getDiagonalMatches = function(inputValues) {
+  validator.getArrayOfDiagonalWords = function(inputValues) {
     inputValues = sanitizeInput(inputValues); //TODO: remove it
     var newValues = [];
-    for(var i=0; i < inputValues.length - 3; i++) //last 3 items dosen't fill a row of 4
+    //Work for NxN matrix where rows and cols are the same value. i> 2 because I need at least 4 items diag
+    for(var i=inputValues[0].length - 1; i > 2; i--)
     {
-      for(var j=0; j <inputValues.length; j++) {
-        newValues.push(getDiagWords(i,j, inputValues));
+      var firstColDownUpDiag = [], lastColDownUpDiag = [];
+      var firstColUpDownDiag = [], lastColUpDownDiag = [];
+      var yDecrement = i;
+      var yIncrement = inputValues.length - i - 1;
+      var xDecrement = inputValues[yIncrement].length - 1;
+      var xIncrement = 0;
+
+      firstColDownUpDiag.push(inputValues[i][0]);
+      lastColDownUpDiag.push(inputValues[i][xDecrement]);
+      firstColUpDownDiag.push(inputValues[yIncrement][xIncrement]);
+      lastColUpDownDiag.push(inputValues[yIncrement][xDecrement]);
+
+      while(yDecrement > 0 && xIncrement < inputValues[i].length && xDecrement > 0 && yIncrement < inputValues.length)
+      {
+        yDecrement--;
+        yIncrement++;
+        xIncrement++;
+        xDecrement--;
+        firstColDownUpDiag.push(inputValues[yDecrement][xIncrement]);
+        lastColDownUpDiag.push(inputValues[yDecrement][xDecrement]);
+        firstColUpDownDiag.push(inputValues[yIncrement][xIncrement]);
+        lastColUpDownDiag.push(inputValues[yIncrement][xDecrement]);
       }
+
+      newValues.push(firstColDownUpDiag);
+      newValues.push(lastColDownUpDiag);
+      if(inputValues.length - i - 1 > 0) { //Don't add main diagonal to avoid duplicated.
+        newValues.push(firstColUpDownDiag);
+        newValues.push(lastColUpDownDiag);
+      }
+
+
     }
+    return newValues;
+  };
+
+  validator.getDiagonalMatches = function(inputValues) {
+    var newValues = validator.getArrayOfDiagonalWords(inputValues);
     return validator.getHorizontalMatches(newValues);
   };
 

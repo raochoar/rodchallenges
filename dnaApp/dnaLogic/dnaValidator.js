@@ -118,6 +118,7 @@ function DnaValidator() {
       if (row.length != matrixSize) {
         result.isValid = false;
         result.message = 'This API works only for NxN matrix. So height and width of the matrix has to be equal.';
+        return false;
       }
       var validCharacters = _.every(row, function (letter) {
         return validLetters.indexOf(letter) >= 0;

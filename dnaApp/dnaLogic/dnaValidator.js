@@ -174,4 +174,4 @@ function DnaValidator() {
   return validator;
 }
 
-module.exports = DnaValidator;
+module.exports = DnaValidator();

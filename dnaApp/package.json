@@ -5,9 +5,12 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "testCoverage": "nyc --reporter=html --reporter=text mocha"
+    "testCoverage": "nyc --reporter=html --reporter=text mocha",
+    "initDatabase": "node ./databaseSetup/createTables.js && node ./databaseSetup/populateInitialData.js ",
+    "deleteDatabase": "node ./databaseSetup/deleteDatabase.js"
   },
   "dependencies": {
+    "aws-sdk": "^2.247.1",
     "chai": "^4.1.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",

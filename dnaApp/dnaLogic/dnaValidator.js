@@ -1,5 +1,10 @@
 var _ = require('lodash');
 
+/*
+TODO: improvemnt area, if the bussines dosen't require to get full match statitics of
+mutant dna, we can improve this breaking the search after the second match. That will
+improve the performance in some cases.
+ */
 function DnaValidator() {
   var validator = {};
   var validLetters = ['A', 'C', 'G', 'T'];

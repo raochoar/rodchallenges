@@ -7,6 +7,8 @@ AWS.config.update(settings.AWSSettings);
 
 function DnaRepository() {
   var dnaRepo = {};
+  var dynamoDb = new AWS.DynamoDB();
+  var docClient = new AWS.DynamoDB.DocumentClient();
 
   function getHashKey(inputValues) {
     var sourceString = '';
@@ -64,8 +66,81 @@ function DnaRepository() {
 
   }
 
+  dnaRepo.getDnaByHash = function (hashKey, done) {
+    var params = {
+      TableName: "MutantDNAs",
+      KeyConditionExpression: "dnaHash = :dnaHashValue",
+      ExpressionAttributeValues: {
+        ":dnaHashValue": hashKey
+      }
+    };
+
+    function lookForNonMutants() {
+      params.TableName = "NonMutantDNAs";
+      docClient.query(params, function (err, data) {
+        if (err) {
+          console.error("Unable to query nomutants. Error:", JSON.stringify(err, null, 2));
+          done(err);
+        } else {
+          done(err, JSON.parse(data.Items[0].dnaInfo));
+        }
+      });
+    }
+
+    function lookForMutants() {
+      docClient.query(params, function (err, data) {
+        if (err) {
+          console.error("Unable to query mutants. Error:", JSON.stringify(err, null, 2));
+          done(err);
+        } else {
+          console.log("Query succeeded on mutants.");
+          if (data.Count === 0) {
+            lookForNonMutants();
+          } else {
+            done(err, JSON.parse(data.Items[0].dnaInfo));
+          }
+        }
+      });
+    }
+
+    lookForMutants();
+
+  };
+
+  dnaRepo.getDnaStats = function (done) {
+    var params = {
+      TableName: 'dnaStats',
+      Select: 'ALL_ATTRIBUTES'
+    };
+    dynamoDb.scan(params, function (err, data) {
+      if (err) {
+        console.error('Error trying to get the stats:' + JSON.stringify(err, null, 2));
+      }
+      else {
+        console.log('Stats scan done:', JSON.stringify(data, null, 2));
+        var result = {
+          count_mutant_dna: 0,
+          count_human_dna: 0,
+          ratio: 0
+        };
+        _.each(data.Items, function (item) {
+          if (_.startsWith(item.counterDescriptor.S, 'nonMutantStat')) {
+            result.count_human_dna += _.parseInt(item.count.N);
+          } else {
+            result.count_mutant_dna += _.parseInt(item.count.N);
+          }
+        });
+        if (result.count_mutant_dna + result.count_human_dna > 0) {
+          result.ratio = _.ceil(
+            (result.count_mutant_dna / (result.count_mutant_dna + result.count_human_dna )), 2);
+        }
+      }
+      done(err, result);
+    });
+  };
+
   dnaRepo.saveDna = function (dnaInfo, done) {
-    var docClient = new AWS.DynamoDB.DocumentClient();
+
     var hashKey = getHashKey(dnaInfo.inputValidation.inputValues);
     //This hash pretends to be unique for each matrix combination
     // also it is a short key if we work with big dna matrix

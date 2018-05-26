@@ -1,8 +1,42 @@
 var expect = require('chai').expect;
 var request = require('supertest');
-var app = require('../app.js');
+var proxyquire = require('proxyquire');
+
+
 
 describe('This is a set of test of mutant REST api', function () {
+  var dnaRepositoryStub;
+
+  beforeEach(function () {
+    dnaRepositoryStub = {
+      saveDna: function (result, done) {
+        done('mockHash', null, null);
+      }
+    };
+    app = proxyquire('../app.js', {'./dnaLogic/dnaRepository': dnaRepositoryStub});
+  });
+
+  it('has to return 500 when a repository returns an error', function (done) {
+      dnaRepositoryStub.saveDna = function (result, d) {
+        d('mockHash', 'something went worng', null);
+      };
+
+      var sampleMutant = {
+        dna: ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG']
+      }
+      request(app)
+        .post('/mutant')
+        .send(sampleMutant)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(500)
+        .end(function (err, res) {
+          if (err) throw err;
+          expect(res.text).to.equal('Something went worng, please try later..');
+          done();
+        });
+    }
+  );
 
   it('has to detect wrong dna samples like irregular matrixs and return 400', function (done) {
     var irregularDna = {dna: ['ATGCGA', 'CAGTGC', 'TTATTDDDDDDT', 'AGACGG', 'GCGTCA', 'TCACTG']};

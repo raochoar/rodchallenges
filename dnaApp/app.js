@@ -3,9 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var repository = require('./dnaLogic/dnaRepository'); //Define the DAL layer
 var indexRouter = require('./routes/index');
 var mutantRouter = require('./routes/mutant');
+var statsRouter = require('./routes/stats');
 
 var app = express();
 
@@ -20,7 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/mutant', mutantRouter);
+app.use('/mutant', mutantRouter.getRouter(repository));
+app.use('/stats', statsRouter.getRouter(repository));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

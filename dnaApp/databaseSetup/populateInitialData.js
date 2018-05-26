@@ -1,10 +1,8 @@
 var AWS = require('aws-sdk');
+var settings = require('../enviromentConfig');
 
+AWS.config.update(settings.AWSSettings);
 
-AWS.config.update({
-  region: "us-west-2",
-  endpoint: "http://localhost:8000"
-});
 var dynamodb = new AWS.DynamoDB();
 // Waits for tables to be come ACTIVE.
 // Useful for waiting for table operations like CreateTable to complete.

@@ -1,9 +1,8 @@
 var AWS = require("aws-sdk");
 var _ = require('lodash');
-AWS.config.update({
-  region: "us-west-2",
-  endpoint: "http://localhost:8000"
-});
+var settings = require('../enviromentConfig');
+
+AWS.config.update(settings.AWSSettings);
 
 var dynamodb = new AWS.DynamoDB();
 var tables = ['MutantDNAs', 'NonMutantDNAs', 'dnaStats'];

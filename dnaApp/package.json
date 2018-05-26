@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "./node_modules/.bin/mocha --reporter spec",
-    "testCoverage": "nyc --reporter=html --reporter=text mocha",
-    "initDatabase": "node ./databaseSetup/createTables.js && node ./databaseSetup/populateInitialData.js ",
-    "deleteDatabase": "node ./databaseSetup/deleteDatabase.js"
+    "e2eTest": "./node_modules/.bin/mocha --reporter spec e2eTest/",
+    "unitTest": "./node_modules/.bin/mocha --reporter spec unitTest/",
+    "testCoverage": "nyc --reporter=html --reporter=text mocha unitTest/",
+    "initDatabase": "node ./databaseSetup/initDatabase.js",
+    "databaseAdminClient": "set DYNAMO_ENDPOINT=http://localhost:8000 &&  dynamodb-admin"
   },
   "dependencies": {
     "aws-sdk": "^2.247.1",
@@ -18,6 +19,7 @@
     "http-errors": "~1.6.2",
     "istanbul": "^0.4.5",
     "jade": "~1.11.0",
+    "js-sha512": "^0.7.1",
     "lodash": "^4.17.10",
     "mocha": "^5.2.0",
     "morgan": "~1.9.0",

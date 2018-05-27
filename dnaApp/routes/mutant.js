@@ -3,7 +3,12 @@ var router = express.Router();
 var dnaValidator = require('../dnaLogic/dnaValidator');
 var dnaRepository;
 
-
+/**
+ * This method process a validDna result after save it into
+ * the repository layer
+ * @param result
+ * @param res
+ */
 function processValidDna(result, res) {
   dnaRepository.saveDna(result, function (hashKey, err, data) {
     if (err != null) {
@@ -18,6 +23,10 @@ function processValidDna(result, res) {
   });
 }
 
+/**
+ * This method is the /mutant entry point for
+ * post verb
+ */
 router.post('/', function (req, res, next) {
   if (!req.body.dna) {
     res.status(400).send('Your request is not valid, please send content/type headers and a valid json.')
@@ -32,6 +41,12 @@ router.post('/', function (req, res, next) {
 
 });
 
+/**
+ * This is a object factory that inject a repository
+ * dependency in order to decouple the data access layer
+ * form middleware logic.
+ * @type {{getRouter: mutantFactory.getRouter}}
+ */
 var mutantFactory = {
   getRouter: function (repository) {
     dnaRepository = repository;

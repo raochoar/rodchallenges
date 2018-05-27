@@ -9,6 +9,11 @@ function DnaValidator() {
   var validator = {};
   var validLetters = ['A', 'C', 'G', 'T'];
 
+  /**
+   * This function detects horizontal matches in an array
+   * @param word An array of words to analyze
+   * @returns {number} The number of matches found
+   */
   function hasHorizontalMatch(word) {
     var prevLetter = '';
     var count = 1;
@@ -35,6 +40,13 @@ function DnaValidator() {
     return matches; //return true if it has a horizontal match.
   }
 
+  /**
+   * This function analyze the horizontal matches in a matrix
+   * it iterates over every row and use other function to complete
+   * the analysis.
+   * @param inputValues
+   * @returns {number}
+   */
   validator.getHorizontalMatches = function (inputValues) {
     var matcherCounter = 0;
     _.each(inputValues, function (word) {
@@ -43,8 +55,12 @@ function DnaValidator() {
     return matcherCounter;
   };
 
-  //Since the input is an array of string, we need a matrix
-  //to improve the process.
+  /**
+   * Converts an array of strings into a matrix of strings
+   * this is required to consume the values with lodash
+   * @param inputValues
+   * @returns {Array}
+   */
   function sanitizeInput(inputValues) {
     var result = [];
     _.each(inputValues, function (row) {
@@ -53,13 +69,25 @@ function DnaValidator() {
     return result;
   }
 
+  /**
+   * This method returns the number of vertical matches in a matrix
+   * it use loads to turn the matrix and reuse the horizontal algorithm
+   * to finish the analysis.
+   * @param inputValues
+   * @returns {number}
+   */
   validator.getVerticalMatches = function (inputValues) {
 
     var newValues = _.zip.apply(_, inputValues); //transpond the matrix using lodash
     return validator.getHorizontalMatches(newValues);
   };
 
-
+  /**
+   * This method returns an array of every possible
+   * diagonal with more than 4 items.
+   * @param inputValues
+   * @returns {Array}
+   */
   validator.getArrayOfDiagonalWords = function (inputValues) {
 
     var newValues = [];
@@ -99,13 +127,23 @@ function DnaValidator() {
     }
     return newValues;
   };
-
+  /**
+   * This function return the number of diagonal matches.
+   * @param inputValues
+   * @returns {number}
+   */
   validator.getDiagonalMatches = function (inputValues) {
     var newValues = validator.getArrayOfDiagonalWords(inputValues);
     return validator.getHorizontalMatches(newValues);
   };
 
-
+  /**
+   * This method validate the source matrix.
+   * It returns a boolean with the status and a message
+   * if the matrix is not valid.
+   * @param inputValues
+   * @returns {{isValid: boolean, message: string}}
+   */
   validator.getValidMatrix = function (inputValues) {
     var result = {isValid: true, message: ''};
     if (!_.isArray(inputValues)) {
@@ -141,9 +179,14 @@ function DnaValidator() {
 
   };
 
-  /*
-    This method return isMutant true or false
-    if the input validation is not valid a null value will be returned
+  /**
+   * Main entrance to validate if a array of string
+   * represent or not a mutant dna.
+   * Returns a new inputValidation matrix of string
+   * ready to be stored.
+   * Also return the boolean flag of mutant status
+   * @param inputValues
+   * @returns {{isMutant: null, inputValidation: null}}
    */
   validator.isMutant = function (inputValues) {
     var result = {

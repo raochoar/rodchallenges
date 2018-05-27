@@ -5,11 +5,25 @@ var AWS = require("aws-sdk");
 
 AWS.config.update(settings.AWSSettings);
 
+/**
+ * This function returns a object with the data access
+ * layer logic that will consume the rest API middleware.
+ * @returns {{}}
+ * @constructor
+ */
 function DnaRepository() {
   var dnaRepo = {};
   var dynamoDb = new AWS.DynamoDB();
   var docClient = new AWS.DynamoDB.DocumentClient();
 
+  /**
+   * In order to keep small key with uniform distribution,
+   * we are hashing the input matrix to get a hash of 512
+   * The possibility of collision is very low so we can use this value
+   * as a digital identifier of the original dna matrix.
+   * @param inputValues
+   * @returns {*}
+   */
   function getHashKey(inputValues) {
     var sourceString = '';
     _.each(inputValues, function (row) {
@@ -21,10 +35,25 @@ function DnaRepository() {
     return sha512(sourceString);
   }
 
+  /**
+   * This method receive 2 dna matrix and uses loadsh
+   * to compare its values.
+   * @param dnaInfo1
+   * @param dnaInfo2
+   * @returns {*}
+   */
   function compareDnaInfo(dnaInfo1, dnaInfo2) {
     return _.isEqual(dnaInfo1, dnaInfo2);
   }
 
+  /**
+   * This method use DynamoDB API to store an incrementation
+   * in the counters table
+   * @param counterKey
+   * @param docClient
+   * @param done
+   * @param hashKey
+   */
   function increaseStatsCounter(counterKey, docClient, done, hashKey) {
 // Increase counters...
     var params = {
@@ -51,6 +80,18 @@ function DnaRepository() {
     });
   }
 
+  /**
+   * This method update the stats if the dna is new. We use a return value
+   * from the DynamoDB put call in order to detect new occurrence.
+   * Also we are detecting hashing collisions and logging that cases.
+   * @param data
+   * @param dnaInfo
+   * @param err
+   * @param counterKey
+   * @param docClient
+   * @param done
+   * @param hashKey
+   */
   function updateStats(data, dnaInfo, err, counterKey, docClient, done, hashKey) {
     console.log("Added item:", JSON.stringify(data, null, 2));
     var isNewDna = data.Attributes === undefined; //new data
@@ -66,6 +107,12 @@ function DnaRepository() {
 
   }
 
+  /**
+   * This method calls to DynamoDB to get a dny by hash key
+   * It is used for testing now.
+   * @param hashKey
+   * @param done
+   */
   dnaRepo.getDnaByHash = function (hashKey, done) {
     var params = {
       TableName: "MutantDNAs",
@@ -107,6 +154,14 @@ function DnaRepository() {
 
   };
 
+  /**
+   * This method call the callback done, with the
+   * results of the current stats.
+   * We are distributing the statistics in 50 keys in order
+   * to avoid to have hot key issues in the NonSQL server and
+   * improve performance on updating the counters values.
+   * @param done
+   */
   dnaRepo.getDnaStats = function (done) {
     var params = {
       TableName: 'dnaStats',
@@ -139,6 +194,12 @@ function DnaRepository() {
     });
   };
 
+  /**
+   * This method receive a dnaInfo valid and call the
+   * function done when the saving process has been completed.
+   * @param dnaInfo
+   * @param done
+   */
   dnaRepo.saveDna = function (dnaInfo, done) {
 
     var hashKey = getHashKey(dnaInfo.inputValidation.inputValues);

@@ -156,3 +156,9 @@ There is a web console to render the local dynamoDB data. You can start that con
 Tha will host an admin console on this endpoint: http://localhost:8001
 
 There is also a cloud monitoring app here https://app.keymetrics.io (if your pm2 is linked to your account and service)
+
+## Deployment schema 
+
+Following this deployment schema you will get a scalable elastic performance according to the load requirements:
+
+![DeploymentSchema](https://github.com/raochoar/rodchallenges/blob/master/Deployment%20Schema%20to%20improbe%20scalability.PNG?raw=true)

@@ -1,6 +1,7 @@
 var settings = {
   AWSSettings: {
-    region: "us-west-2",
+    region: "sa-east-1",
+    //endpoint: "http://dynamodb.sa-east-1.amazonaws.com"
     endpoint: "http://localhost:8000"
   }
 };

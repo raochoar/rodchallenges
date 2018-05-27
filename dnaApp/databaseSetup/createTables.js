@@ -21,8 +21,8 @@ var task = function (done) {
         {AttributeName: "dnaHash", AttributeType: "S"}
       ],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 10,
-        WriteCapacityUnits: 10
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5
       }
     };
 
@@ -47,8 +47,8 @@ var task = function (done) {
         {AttributeName: "dnaHash", AttributeType: "S"}
       ],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 10,
-        WriteCapacityUnits: 10
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5
       }
     };
     dynamodb.createTable(params, function (err, data) {
@@ -72,8 +72,8 @@ var task = function (done) {
         {AttributeName: "counterDescriptor", AttributeType: "S"}
       ],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 10,
-        WriteCapacityUnits: 10
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5
       }
     };
     dynamodb.createTable(params, function (err, data) {

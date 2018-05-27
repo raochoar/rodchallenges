@@ -8,7 +8,11 @@
     "unitTest": "./node_modules/.bin/mocha --reporter spec unitTest/",
     "testCoverage": "nyc --reporter=html --reporter=text mocha unitTest/",
     "initDatabase": "node ./databaseSetup/initDatabase.js",
-    "databaseAdminClient": "set DYNAMO_ENDPOINT=http://localhost:8000 &&  dynamodb-admin"
+    "databaseAdminClient": "set DYNAMO_ENDPOINT=http://localhost:8000 &&  dynamodb-admin",
+    "startOnProduction": "pm2 start ./bin/www -i max",
+    "stopOnProduction": "pm2 stop www",
+    "monitorProduction": "pm2 monit",
+    "seeProductionLogs": "pm2 logs www --format"
   },
   "dependencies": {
     "aws-sdk": "^2.247.1",
@@ -23,6 +27,7 @@
     "lodash": "^4.17.10",
     "mocha": "^5.2.0",
     "morgan": "~1.9.0",
+    "pm2": "^2.10.4",
     "proxyquire": "^2.0.1",
     "request": "^2.87.0",
     "sinon": "^5.0.7"

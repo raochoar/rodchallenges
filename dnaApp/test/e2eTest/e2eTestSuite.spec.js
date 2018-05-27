@@ -1,12 +1,12 @@
 /**
  * This test requires access to a dynamoDB (local or remote)
  */
-var dnaRepository = require('../dnaLogic/dnaRepository');
+var dnaRepository = require('../../dnaLogic/dnaRepository');
 var expect = require('chai').expect;
-var dbHelper = require('../databaseSetup/databaseHelper');
+var dbHelper = require('../../databaseSetup/databaseHelper');
 var _ = require('lodash');
 
-describe('E2E test, it use external resource like database', function () {
+describe('E2E test, it uses external resource like database', function () {
   var dnaHumanSample = {
     "isMutant": false,
     "inputValidation": {
@@ -47,7 +47,7 @@ describe('E2E test, it use external resource like database', function () {
   describe('REST layer test', function () {
     var expect = require('chai').expect;
     var request = require('supertest');
-    var app = require("../app.js");
+    var app = require("../../app.js");
 
     it('has to return the correct stats', function (done) {
       var expectedResult = {

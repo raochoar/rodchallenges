@@ -13,7 +13,7 @@ describe('This is a set of test of mutant REST api', function () {
         done('mockHash', null, null);
       }
     };
-    app = proxyquire('../app.js', {'./dnaLogic/dnaRepository': dnaRepositoryStub});
+    app = proxyquire('../../app.js', {'./dnaLogic/dnaRepository': dnaRepositoryStub});
   });
 
   it('has to return 500 when a repository returns an error', function (done) {
@@ -23,7 +23,7 @@ describe('This is a set of test of mutant REST api', function () {
 
       var sampleMutant = {
         dna: ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG']
-      }
+      };
       request(app)
         .post('/mutant')
         .send(sampleMutant)
@@ -71,7 +71,7 @@ describe('This is a set of test of mutant REST api', function () {
   it('has to detect a mutant and returns 200', function (done) {
     var sampleMutant = {
       dna: ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG']
-    }
+    };
     request(app)
       .post('/mutant')
       .send(sampleMutant)

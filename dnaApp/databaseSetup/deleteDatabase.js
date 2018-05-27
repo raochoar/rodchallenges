@@ -1,6 +1,5 @@
 var AWS = require("aws-sdk");
-var _ = require('lodash');
-var settings = require('../enviromentConfig');
+var settings = require('../environmentConfig');
 
 AWS.config.update(settings.AWSSettings);
 

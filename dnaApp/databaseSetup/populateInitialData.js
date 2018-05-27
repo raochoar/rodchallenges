@@ -1,5 +1,5 @@
 var AWS = require('aws-sdk');
-var settings = require('../enviromentConfig');
+var settings = require('../environmentConfig');
 
 AWS.config.update(settings.AWSSettings);
 
@@ -18,7 +18,6 @@ var task = function (done) {
   });
 
   function insertData() {
-    var docClient = new AWS.DynamoDB.DocumentClient();
 
     console.log("Preparing stats table....");
 

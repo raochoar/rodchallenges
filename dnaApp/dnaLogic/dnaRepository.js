@@ -1,6 +1,6 @@
 var sha512 = require('js-sha512').sha512;
 var _ = require('lodash');
-var settings = require('../enviromentConfig');
+var settings = require('../environmentConfig');
 var AWS = require("aws-sdk");
 
 AWS.config.update(settings.AWSSettings);

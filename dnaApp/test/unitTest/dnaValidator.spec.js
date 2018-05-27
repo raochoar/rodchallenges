@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var expect = require('chai').expect;
-var validator = require('../dnaLogic/dnaValidator');
+var validator = require('../../dnaLogic/dnaValidator');
 
 
 describe('Validate dna values', function () {

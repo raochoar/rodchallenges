@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "e2eTest": "./node_modules/.bin/mocha --reporter spec e2eTest/",
-    "unitTest": "./node_modules/.bin/mocha --reporter spec unitTest/",
-    "testCoverage": "nyc --reporter=html --reporter=text mocha unitTest/",
+    "e2eTest": "./node_modules/.bin/mocha --reporter spec test/e2eTest/",
+    "unitTest": "./node_modules/.bin/mocha --reporter spec test/unitTest/",
+    "unitAndE2EtestCoverage": "nyc --reporter=html --reporter=text mocha --recursive test/",
     "initDatabase": "node ./databaseSetup/initDatabase.js",
     "databaseAdminClient": "set DYNAMO_ENDPOINT=http://localhost:8000 &&  dynamodb-admin",
     "startOnProduction": "pm2 start ./bin/www -i max",

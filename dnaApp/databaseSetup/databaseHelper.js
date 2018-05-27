@@ -1,12 +1,10 @@
 var AWS = require('aws-sdk');
-var settings = require('../enviromentConfig');
+var settings = require('../environmentConfig');
 var createTables = require('./createTables');
 var deleteDatabase = require('./deleteDatabase');
 var populateInitialData = require('./populateInitialData');
 
 AWS.config.update(settings.AWSSettings);
-
-var dynamodb = new AWS.DynamoDB();
 
 var Helper = function () {
   var helper = {};

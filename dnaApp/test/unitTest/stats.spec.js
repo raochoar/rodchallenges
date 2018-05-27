@@ -3,7 +3,7 @@ var request = require('supertest');
 var proxyquire = require('proxyquire');
 
 
-describe('This is a set of test of mutant REST api', function () {
+describe('This is a set of test of STATS REST api', function () {
   var dnaRepositoryStub;
 
   beforeEach(function () {
@@ -12,7 +12,7 @@ describe('This is a set of test of mutant REST api', function () {
         callback(null, 'mockdata');
       }
     };
-    app = proxyquire('../app.js', {'./dnaLogic/dnaRepository': dnaRepositoryStub});
+    app = proxyquire('../../app.js', {'./dnaLogic/dnaRepository': dnaRepositoryStub});
   });
 
   it('has to return correct stats response', function (done) {

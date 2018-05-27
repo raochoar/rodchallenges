@@ -154,3 +154,5 @@ There is a web console to render the local dynamoDB data. You can start that con
  npm run databaseAdminClient
  ```
 Tha will host an admin console on this endpoint: http://localhost:8001
+
+There is also a cloud monitoring app here https://app.keymetrics.io (if your pm2 is linked to your account and service)

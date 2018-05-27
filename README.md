@@ -4,7 +4,7 @@ Personal repository for testing some algorithms and cloud services.
 # Dna Analyzer REST API
 This is a REST API implemented with Node.JS using expressJS and DynamoDB as a NoSQL database.
 
-##Dna installation / environment setup
+## Dna installation / environment setup
 
 Since this project store the results in a NoSQL database you will need to setup a local DynamoDB on your development environment to start to test this.
 Please follow this steps to setup your DynamoDB and NodeJS.
@@ -48,7 +48,7 @@ npm run start
 ```
 The application will start to listening at port 3000. So you can start to interact locally with this endpoint: http://localhost:3000
 
-##Rest layer documentation
+## Rest layer documentation
 ### /mutant
 This api will return 200 Ok if the dna matches with a mutant pattern. If not the API will return 403 Forbidden.
 
@@ -96,7 +96,7 @@ Body:
 }
 ```
 
-##Testing DNA Application
+## Testing DNA Application
 This API has 2 level of test:
 
 *Unit test*: this test does not have dependencies with external resources like DynamoDB. To run this unit test you need to execute this npm command:

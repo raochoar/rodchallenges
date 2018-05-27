@@ -161,4 +161,4 @@ There is also a cloud monitoring app here https://app.keymetrics.io (if your pm2
 
 Following this deployment schema you will get a scalable elastic performance according to the load requirements:
 
-![DeploymentSchema](https://github.com/raochoar/rodchallenges/blob/master/Deployment%20Schema%20to%20improbe%20scalability.PNG?raw=true)
+![DeploymentSchema](https://github.com/raochoar/rodchallenges/blob/master/docs/Deployment%20Schema%20to%20improbe%20scalability.PNG?raw=true)
